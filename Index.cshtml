@@ -1,0 +1,201 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+    TempData["RowCheck"] = null;
+}
+
+
+<div class="jumbotron">
+    <h1>Sudoku</h1>
+   
+</div>
+@if (TempData["Message"] != null)
+{
+    <h2>@TempData["Message"]</h2>
+}
+@if (TempData["RowCheck"] != null)
+{
+    <h2>@TempData["RowCheck"]</h2>
+}
+<div class="row">
+@using (Html.BeginForm("sudoku", "home"))
+{
+    <table class="col-md-offset-3" id="myTable">
+        @for (int r = 1; r < 4; r++)
+        {
+        
+        <tr class="sectionRow-@r" name="sectionRow_@r">
+            @for (int i = 0; i < 3; i++)
+            {
+                if (i == 2)
+                {
+                    <td id="sectionRow-@r-sec1-@i" class="sectionEnd"><input class="col-md-offset-5" name="sec1" type="number"/></td>
+                }
+                else
+                { 
+                <td id="sectionRow-@r-sec1-@i"><input class="col-md-offset-5"  name="sec1" type="number"/></td>
+                }
+            }
+           
+            @for (int i = 0; i < 3; i++)
+            {
+                if (i == 2)
+                {
+                    <td id="sectionRow-@r-sec2-@i" class="sectionEnd"><input class="col-md-offset-5"  name="sec2" type="number" /></td>
+                }
+                else
+                {
+                    <td id="sectionRow-@r-sec2-@i"><input class="col-md-offset-5" name="sec2" type="number" /></td>
+                }
+
+
+            }
+            @for (int i = 0; i < 3; i++)
+            {
+                <td id="sectionRow-@r-sec3-@i"><input class="col-md-offset-5" name="sec3" type="number" /></td>
+            }
+        </tr>
+        }
+
+        @for (int r = 4; r < 7; r++)
+        {
+            <tr class="sectionRow-@r">
+
+                @for (int i = 0; i < 3; i++)
+                {
+                    if (i == 2)
+                    {
+                        <td id="sectionRow-@r-sec4-@i" class="sectionEnd"><input class="col-md-offset-5" name="sec4" type="number" /></td>
+                    }
+                    else
+                    {
+                        <td id="sectionRow-@r-sec4-@i"><input class="col-md-offset-5" name="sec4" type="number" /></td>
+                    }
+                }
+                @for (int i = 0; i < 3; i++)
+                {
+                    if (i == 2)
+                    {
+                        <td id="sectionRow-@r-sec5-@i" class="sectionEnd"><input class="col-md-offset-5" name="sec5" type="number" /></td>
+                    }
+                    else
+                    {
+                        <td id="sectionRow-@r-sec5-@i"><input class="col-md-offset-5" name="sec5" type="number" /></td>
+                    }
+
+
+                }
+                @for (int i = 0; i < 3; i++)
+                {
+                    <td id="sectionRow-@r-sec6-@i"><input class="col-md-offset-5" name="sec6" type="number" /></td>
+                }
+            </tr>
+        }
+
+        @for (int r = 7; r < 10; r++)
+        {
+            <tr class="sectionRow-@r">
+                @for (int i = 0; i < 3; i++)
+                {
+                    if (i == 2)
+                    {
+                        <td id="sectionRow-@r-sec7-@i" class="sectionEnd"><input class="col-md-offset-5" name="sec7" type="number" /></td>
+                    }
+                    else
+                    {
+                        <td id="sectionRow-@r-sec7-@i"><input class="col-md-offset-5" name="sec7" type="number" /></td>
+                    }
+                }
+                @for (int i = 0; i < 3; i++)
+                {
+                    if (i == 2)
+                    {
+                        <td id="sectionRow-@r-sec8-@i" class="sectionEnd"><input class="col-md-offset-5" name="sec8" type="number" /></td>
+                    }
+                    else
+                    {
+                        <td id="sectionRow-@r-sec8-@i"><input class="col-md-offset-5" name="sec8" type="number" /></td>
+                    }
+
+
+                }
+                @for (int i = 0; i < 3; i++)
+                {
+                    <td id="sectionRow-@r-sec9-@i"><input class="col-md-offset-5" name="sec9" type="number" /></td>
+                }
+            </tr>
+        }
+    </table>
+        <br />
+
+        <input class="col-md-offset-2 col-md-2" type="submit" value="submit"  />
+        }
+</div>
+@*<button onclick="CheckRows()"> Check ROws</button>*@
+@section scripts
+{
+    <script>
+        //var row1 = [];
+        //var row = document.getElementsByClassName('sectionRow-1');
+        //$('row').each(function () {
+        //    row1.push($(this).nextAll('Input').value);
+
+        //});
+        var table = document.getElementById('myTable');
+        //var id = $(table).each(
+        var id =  $(table).find('td').attr('id'); //gets the Id of each td.
+        var row1 = $(table).find('input');
+        var value = $(table).find('input');
+        
+        //.find('td').attr('id'); //gets the Id of each td.
+       // var row1 = $(table).find('input').attr('name');
+        console.log(table);
+        console.log(id);
+        console.log(row1);
+        console.log(value);
+        //function CheckRows(){
+        //var row1 = [];
+        
+        //console.log(row1);
+        //}
+
+        @*var row1values = document.getElementsByClassName('sectionRow-0');
+        console.log(row1values);
+        function CheckRows() {
+        var answerKey = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+        console.log(answerKey);
+            var table = document.getElementById('myTable');
+            for (var i = 0; i < table.rows[0]; i++)
+            {
+                if (row.innerText == answerKey) {
+                     @{TempData["RowCheck"] = "Row matches";
+                     }
+                }
+                else {
+                      @{TempData["RowCheck"] = "Row Failed";
+                      }
+                }
+            }
+        }*@
+    </script>
+
+
+
+
+
+
+
+    @*<script>
+        var array = [];
+        var table = document.getElementById('myTable');
+        
+        for (var i = 0, row; row = table.rows[i]; i++)
+        {
+            var cellValue = row.cells[i].innerText;
+            if (array.find() != cellValue) {
+                array.push(row.cells[i].innerText);
+            }
+        }
+        console.log(array);
+    </script>*@
+    
+    }
