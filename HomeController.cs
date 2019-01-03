@@ -120,7 +120,7 @@ namespace Sudoku.Controllers
             sec2.Sort();
             sec3.Sort();
             sec4.Sort();
-            sec5.Sort();
+            sec5.Sort(); 
             sec6.Sort();
             sec7.Sort();
             sec8.Sort();

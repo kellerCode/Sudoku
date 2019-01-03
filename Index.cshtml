@@ -1,211 +1,201 @@
-﻿
-@{
-    ViewBag.Title = "Kaylynn's Sudoku";
+﻿@{
+    ViewBag.Title = "Home Page";
+    TempData["RowCheck"] = null;
 }
-@section styles{
-<link href="~/Content/SudokuCSS.css" rel="stylesheet" />    
-    }
 
 
-<h1 class="text-center">Sudoku</h1>
-<br />
-
-@if (ViewData["Message"] != null)
+<div class="jumbotron">
+    <h1>Sudoku</h1>
+   
+</div>
+@if (TempData["Message"] != null)
 {
-    <h2 class="text-center message">@TempData["Message"]</h2>
+    <h2>@TempData["Message"]</h2>
 }
 @if (TempData["RowCheck"] != null)
 {
     <h2>@TempData["RowCheck"]</h2>
 }
-<div id="Message"></div>
 <div class="row">
-    <div class="col-md-3" id="instructions">
-        <h1 class="text-center">Instructions</h1>
-        <hr />
-        <p>This is a standard Sudoku game.</p>
-        <p>-All rows must have numbers 1-9</p>
-        <p>-All columns must have numbers 1-9</p>
-        <p>-All 3x3 sections must have numbers 1-9</p>
-        <br />
-        <p>Input all numbers then press submit</p>
-        <p></p>
-
-    </div>
-    @using (Html.BeginForm("puzzle", "Sudoku", FormMethod.Post, new { id = "sudokuForm" }))
-    {
-        <table id="myTable">
-            <!--Needed to create table with multiple for loops in order to achevie submitting the correct sections to the controller. I also set up each input tag with it's own unique id in case I need to use that at a later date for advanced funtionality, comments on first set of for loops, the rest work the same just for different rows.-->
-
-            <!--Getting first rows-->
-            @for (int r = 1; r < 4; r++)
+@using (Html.BeginForm("sudoku", "home"))
+{
+    <table class="col-md-offset-3" id="myTable">
+        @for (int r = 1; r < 4; r++)
+        {
+        
+        <tr class="sectionRow-@r" name="sectionRow_@r">
+            @for (int i = 0; i < 3; i++)
             {
-                <tr class="sectionRow-@r" name="sectionRow_@r">
-                    <!--Getting 3 boxes for each row, with the specific names needed for each section-->
-                    @for (int i = 0; i < 3; i++)
-                    {
-                        <!--This is to get the styling on the 3rd row for the bottom border, adding a class-->
-                        if (i == 2)
-                        {
-
-                            <td id="sectionRow-@r-sec1-@i" class="sectionEnd"><input class="col-md-offset-5" name="sec1" type="number" min="1" max="9" /></td>
-                        }
-                        else
-                        {
-                            <td id="sectionRow-@r-sec1-@i"><input class="col-md-offset-5" name="sec1" type="number" min="1" max="9" /></td>
-                        }
-                    }
-
-                    @for (int i = 0; i < 3; i++)
-                    {
-                        if (i == 2)
-                        {
-                            <td id="sectionRow-@r-sec2-@i" class="sectionEnd"><input class="col-md-offset-5" name="sec2" type="number" min="1" max="9" /></td>
-                        }
-                        else
-                        {
-                            <td id="sectionRow-@r-sec2-@i"><input class="col-md-offset-5" name="sec2" type="number" min="1" max="9" /></td>
-                        }
-
-
-                    }
-                    @for (int i = 0; i < 3; i++)
-                    {
-                        <td id="sectionRow-@r-sec3-@i"><input class="col-md-offset-5" name="sec3" type="number" min="1" max="9" /></td>
-                    }
-                </tr>
+                if (i == 2)
+                {
+                    <td id="sectionRow-@r-sec1-@i" class="sectionEnd"><input class="col-md-offset-5" name="sec1" type="number"/></td>
+                }
+                else
+                { 
+                <td id="sectionRow-@r-sec1-@i"><input class="col-md-offset-5"  name="sec1" type="number"/></td>
+                }
             }
-
-            @for (int r = 4; r < 7; r++)
+           
+            @for (int i = 0; i < 3; i++)
             {
-                <tr class="sectionRow-@r">
-
-                    @for (int i = 0; i < 3; i++)
-                    {
-                        if (i == 2)
-                        {
-                            <td id="sectionRow-@r-sec4-@i" class="sectionEnd"><input class="col-md-offset-5" name="sec4" type="number" min="1" max="9" /></td>
-                        }
-                        else
-                        {
-                            <td id="sectionRow-@r-sec4-@i"><input class="col-md-offset-5" name="sec4" type="number" min="1" max="9" /></td>
-                        }
-                    }
-                    @for (int i = 0; i < 3; i++)
-                    {
-                        if (i == 2)
-                        {
-                            <td id="sectionRow-@r-sec5-@i" class="sectionEnd"><input class="col-md-offset-5" name="sec5" type="number" min="1" max="9" /></td>
-                        }
-                        else
-                        {
-                            <td id="sectionRow-@r-sec5-@i"><input class="col-md-offset-5" name="sec5" type="number" min="1" max="9" /></td>
-                        }
+                if (i == 2)
+                {
+                    <td id="sectionRow-@r-sec2-@i" class="sectionEnd"><input class="col-md-offset-5"  name="sec2" type="number" /></td>
+                }
+                else
+                {
+                    <td id="sectionRow-@r-sec2-@i"><input class="col-md-offset-5" name="sec2" type="number" /></td>
+                }
 
 
-                    }
-                    @for (int i = 0; i < 3; i++)
-                    {
-                        <td id="sectionRow-@r-sec6-@i"><input class="col-md-offset-5" name="sec6" type="number" min="1" max="9" /></td>
-                    }
-                </tr>
             }
-
-            @for (int r = 7; r < 10; r++)
+            @for (int i = 0; i < 3; i++)
             {
-                <tr class="sectionRow-@r">
-                    @for (int i = 0; i < 3; i++)
-                    {
-                        if (i == 2)
-                        {
-                            <td id="sectionRow-@r-sec7-@i" class="sectionEnd"><input class="col-md-offset-5" name="sec7" type="number" min="1" max="9" /></td>
-                        }
-                        else
-                        {
-                            <td id="sectionRow-@r-sec7-@i"><input class="col-md-offset-5" name="sec7" type="number" min="1" max="9" /></td>
-                        }
-                    }
-                    @for (int i = 0; i < 3; i++)
-                    {
-                        if (i == 2)
-                        {
-                            <td id="sectionRow-@r-sec8-@i" class="sectionEnd"><input class="col-md-offset-5" name="sec8" type="number" min="1" max="9" /></td>
-                        }
-                        else
-                        {
-                            <td id="sectionRow-@r-sec8-@i"><input class="col-md-offset-5" name="sec8" type="number" min="1" max="9" /></td>
-                        }
-
-
-                    }
-                    @for (int i = 0; i < 3; i++)
-                    {
-                        <td id="sectionRow-@r-sec9-@i"><input class="col-md-offset-5" name="sec9" type="number" min="1" max="9" /></td>
-                    }
-                </tr>
+                <td id="sectionRow-@r-sec3-@i"><input class="col-md-offset-5" name="sec3" type="number" /></td>
             }
-        </table>
+        </tr>
+        }
 
+        @for (int r = 4; r < 7; r++)
+        {
+            <tr class="sectionRow-@r">
+
+                @for (int i = 0; i < 3; i++)
+                {
+                    if (i == 2)
+                    {
+                        <td id="sectionRow-@r-sec4-@i" class="sectionEnd"><input class="col-md-offset-5" name="sec4" type="number" /></td>
+                    }
+                    else
+                    {
+                        <td id="sectionRow-@r-sec4-@i"><input class="col-md-offset-5" name="sec4" type="number" /></td>
+                    }
+                }
+                @for (int i = 0; i < 3; i++)
+                {
+                    if (i == 2)
+                    {
+                        <td id="sectionRow-@r-sec5-@i" class="sectionEnd"><input class="col-md-offset-5" name="sec5" type="number" /></td>
+                    }
+                    else
+                    {
+                        <td id="sectionRow-@r-sec5-@i"><input class="col-md-offset-5" name="sec5" type="number" /></td>
+                    }
+
+
+                }
+                @for (int i = 0; i < 3; i++)
+                {
+                    <td id="sectionRow-@r-sec6-@i"><input class="col-md-offset-5" name="sec6" type="number" /></td>
+                }
+            </tr>
+        }
+
+        @for (int r = 7; r < 10; r++)
+        {
+            <tr class="sectionRow-@r">
+                @for (int i = 0; i < 3; i++)
+                {
+                    if (i == 2)
+                    {
+                        <td id="sectionRow-@r-sec7-@i" class="sectionEnd"><input class="col-md-offset-5" name="sec7" type="number" /></td>
+                    }
+                    else
+                    {
+                        <td id="sectionRow-@r-sec7-@i"><input class="col-md-offset-5" name="sec7" type="number" /></td>
+                    }
+                }
+                @for (int i = 0; i < 3; i++)
+                {
+                    if (i == 2)
+                    {
+                        <td id="sectionRow-@r-sec8-@i" class="sectionEnd"><input class="col-md-offset-5" name="sec8" type="number" /></td>
+                    }
+                    else
+                    {
+                        <td id="sectionRow-@r-sec8-@i"><input class="col-md-offset-5" name="sec8" type="number" /></td>
+                    }
+
+
+                }
+                @for (int i = 0; i < 3; i++)
+                {
+                    <td id="sectionRow-@r-sec9-@i"><input class="col-md-offset-5" name="sec9" type="number" /></td>
+                }
+            </tr>
+        }
+    </table>
         <br />
 
-        <input class="col-md-offset-7 col-md-2 col-sm-12" type="submit" value="submit" />
-    }
-
+        <input class="col-md-offset-2 col-md-2" type="submit" value="submit"  />
+        }
 </div>
-
-@section scripts{
-
+@*<button onclick="CheckRows()"> Check ROws</button>*@
+@section scripts
+{
     <script>
+        //var row1 = [];
+        //var row = document.getElementsByClassName('sectionRow-1');
+        //$('row').each(function () {
+        //    row1.push($(this).nextAll('Input').value);
 
-        //Add and remove active class on focus to highlight box
-        $("td > input").focus(function (e) {
-            $(this).parent().addClass('active');
-            $(this).addClass('active');
-        }).blur(function (e) {
-            $(this).parent().removeClass('active');
-            $(this).removeClass('active');
-        });
+        //});
+        var table = document.getElementById('myTable');
+        //var id = $(table).each(
+        var id =  $(table).find('td').attr('id'); //gets the Id of each td.
+        var row1 = $(table).find('input');
+        var value = $(table).find('input');
+        
+        //.find('td').attr('id'); //gets the Id of each td.
+       // var row1 = $(table).find('input').attr('name');
+        console.log(table);
+        console.log(id);
+        console.log(row1);
+        console.log(value);
+        //function CheckRows(){
+        //var row1 = [];
+        
+        //console.log(row1);
+        //}
 
-        // Disable up and down keys.
-        $('form').on('keydown', 'input[type=number]', function (e) {
-            if (e.which == 38 || e.which == 40)
-                e.preventDefault();
-        });
-        // Disable scroll when focused on a number input.
-        $('form').on('focus', 'input[type=number]', function (e) {
-            $(this).on('wheel', function (e) {
-                e.preventDefault();
-            });
-        });
-    </script>
-
-    <script>
-        //AJAX FORM SUBMIT
-          $("#sudokuForm").submit(function (e) {
-            var formData = $(this).serializeArray();
-            e.preventDefault();
-            $('#Message').html("<div class='alert alert-info'>Please Wait...</div>");
-            $.ajax({
-                url: "@Url.Action("puzzle", "Sudoku")",
-                type: "post",
-            data: formData,
-            dataType: "json",
-            success: function (response, status, data) {
-                if (response.message == "wrong") {
-                    $('#Message').html("<div class='alert alert-danger'>Try Again...</div>");
-
+        @*var row1values = document.getElementsByClassName('sectionRow-0');
+        console.log(row1values);
+        function CheckRows() {
+        var answerKey = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+        console.log(answerKey);
+            var table = document.getElementById('myTable');
+            for (var i = 0; i < table.rows[0]; i++)
+            {
+                if (row.innerText == answerKey) {
+                     @{TempData["RowCheck"] = "Row matches";
+                     }
                 }
                 else {
-                    $('#Message').html("<div class='alert alert-success'>Good Job!</div>");
-
-                }
-            },
-            error: function (result) {
-                if (result == "wrong") {
-                    $('#Message').html("<div class='alert alert-danger'>Error please refresh page and try again..</div>");
+                      @{TempData["RowCheck"] = "Row Failed";
+                      }
                 }
             }
-        })
-        });
+        }*@
     </script>
+
+
+
+
+
+
+
+    @*<script>
+        var array = [];
+        var table = document.getElementById('myTable');
+        
+        for (var i = 0, row; row = table.rows[i]; i++)
+        {
+            var cellValue = row.cells[i].innerText;
+            if (array.find() != cellValue) {
+                array.push(row.cells[i].innerText);
+            }
+        }
+        console.log(array);
+    </script>*@
+    
     }
