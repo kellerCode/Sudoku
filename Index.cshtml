@@ -1,4 +1,4 @@
-﻿
+﻿@model LincolnGames.UI.MVC.Models.SudokuModel
 @{
     ViewBag.Title = "Kaylynn's Sudoku";
 }
@@ -10,20 +10,23 @@
 <h1 class="text-center">Sudoku</h1>
 <br />
 
-@if (ViewData["Message"] != null)
-{
-    <h2 class="text-center message">@TempData["Message"]</h2>
-}
-@if (TempData["RowCheck"] != null)
-{
-    <h2>@TempData["RowCheck"]</h2>
-}
 <div id="Message"></div>
 <div class="row">
     <div class="col-md-3" id="instructions">
         <h1 class="text-center">Instructions</h1>
         <hr />
-        <p>This is a standard Sudoku game.</p>
+        <p>You can choose below between a blank grid where you input all of the starting numbers yourself. Or select an easy, medium, or hard puzzle. (There are 5 puzzles per difficulty level as of now and it is a random selection, so you may come across the same puzzle)</p>
+        <div id="buttonSection" class="col-md-12">
+            <button onclick="location.href='@Url.Action("index", "Sudoku", new { type = "blank"})'" class="btn-default">Blank</button>
+            <br />
+            <button onclick="location.href='@Url.Action("index", "Sudoku", new { type = "easy"})'" class="btn-default">Easy</button>
+            <br />
+            <button onclick="location.href='@Url.Action("index", "Sudoku", new { type = "medium"})'" class="btn-default">Medium</button>
+            <br />
+            <button onclick="location.href='@Url.Action("index", "Sudoku", new { type = "hard"})'" class="btn-default">Hard</button>
+
+        </div>
+        <br />
         <p>-All rows must have numbers 1-9</p>
         <p>-All columns must have numbers 1-9</p>
         <p>-All 3x3 sections must have numbers 1-9</p>
@@ -34,123 +37,247 @@
     </div>
     @using (Html.BeginForm("puzzle", "Sudoku", FormMethod.Post, new { id = "sudokuForm" }))
     {
+        
+            
+            
+           
         <table id="myTable">
             <!--Needed to create table with multiple for loops in order to achevie submitting the correct sections to the controller. I also set up each input tag with it's own unique id in case I need to use that at a later date for advanced funtionality, comments on first set of for loops, the rest work the same just for different rows.-->
 
-            <!--Getting first rows-->
-            @for (int r = 1; r < 4; r++)
+            <!--This is looping through the array stored in the Model for the first 3 rows and adding values to the input tags. N updates once whenever an unput tag is created. -->
+            @for (int n = 0; n < Model.rows1to3.Count(); n++)
             {
-                <tr class="sectionRow-@r" name="sectionRow_@r">
-                    <!--Getting 3 boxes for each row, with the specific names needed for each section-->
-                    @for (int i = 0; i < 3; i++)
-                    {
-                        <!--This is to get the styling on the 3rd row for the bottom border, adding a class-->
-                        if (i == 2)
-                        {
-
-                            <td id="sectionRow-@r-sec1-@i" class="sectionEnd"><input class="col-md-offset-5" name="sec1" type="number" min="1" max="9" /></td>
-                        }
-                        else
-                        {
-                            <td id="sectionRow-@r-sec1-@i"><input class="col-md-offset-5" name="sec1" type="number" min="1" max="9" /></td>
-                        }
-                    }
-
-                    @for (int i = 0; i < 3; i++)
-                    {
-                        if (i == 2)
-                        {
-                            <td id="sectionRow-@r-sec2-@i" class="sectionEnd"><input class="col-md-offset-5" name="sec2" type="number" min="1" max="9" /></td>
-                        }
-                        else
-                        {
-                            <td id="sectionRow-@r-sec2-@i"><input class="col-md-offset-5" name="sec2" type="number" min="1" max="9" /></td>
-                        }
 
 
-                    }
-                    @for (int i = 0; i < 3; i++)
-                    {
-                        <td id="sectionRow-@r-sec3-@i"><input class="col-md-offset-5" name="sec3" type="number" min="1" max="9" /></td>
-                    }
-                </tr>
+                <!--Getting first rows-->
+                for (int r = 1; r < 4; r++)
+                {
+
+                    <tr class="sectionRow-@r" name="sectionRow_@r">
+                        <!--Getting 3 boxes for each row, with the specific names needed for each section-->
+                        @for (int i = 0; i < 3; i++)
+                        {
+                             <!--This is to get the styling on the 3rd box for the right side border, adding a class-->
+                            if (i == 2)
+                            {
+                                <!--Input tag creation-- Only add a value if the value of the index of n (the for loop above) the Model array is not 0. This inputs the starting values as well as making them readonly. If the value in the array is 0 it just creates a regular input tag with no value. -->
+                                <td id="sectionRow-@r-sec1-@i" @if (Model.rows1to3[n] != 0){ @: class="sectionEnd prefilled"
+                                    } else { @: class="sectionEnd" 
+                                    }>
+                                    <input @if (Model.rows1to3[n] != 0) { @: value="@Model.rows1to3[n]"
+                                    } @if (Model.rows1to3[n] != 0) { @: readonly
+                                    } class="col-md-offset-5" name="sec1" type="number" min="1" max="9" step="1" />
+                                </td>
+                                n++;
+                            }
+                            else
+                            {
+                                <td id="sectionRow-@r-sec1-@i" @if (Model.rows1to3[n] != 0) { @: class="prefilled"
+                                    }>
+                                    <input @if (Model.rows1to3[n] != 0) { @: value="@Model.rows1to3[n]"
+                                    } @if (Model.rows1to3[n] != 0) { @: readonly
+                                    } class="col-md-offset-5" name="sec1" type="number" min="1" max="9" step="1" />
+                                </td>
+                                n++;
+                            }
+                        }
+                        <!--Getting next 3 boxes of the row with correct section names-->
+                        @for (int i = 0; i < 3; i++)
+                        {
+                            if (i == 2)
+                            {
+                                <td id="sectionRow-@r-sec2-@i" @if (Model.rows1to3[n] != 0){ @: class="sectionEnd prefilled"
+                                    } else { @: class="sectionEnd" 
+                                    }>
+                                    <input @if (Model.rows1to3[n] != 0) { @: value="@Model.rows1to3[n]"
+                                     } @if (Model.rows1to3[n] != 0) { @: readonly
+                                     } class="col-md-offset-5" name="sec2" type="number" min="1" max="9" />
+                                </td>
+                                n++;
+                            }
+                            else
+                            {
+                                <td id="sectionRow-@r-sec2-@i" @if (Model.rows1to3[n] != 0) { @: class="prefilled"
+                                    }>
+                                    <input @if (Model.rows1to3[n] != 0) { @: value="@Model.rows1to3[n]"
+                                    } @if (Model.rows1to3[n] != 0) { @: readonly
+                                    } class="col-md-offset-5" name="sec2" type="number" min="1" max="9" />
+                                </td>
+                                n++;
+                            }
+
+
+                        }
+                        
+                        <!--Getting last 3 boxes of the row with correct section names-->
+                        @for (int i = 0; i < 3; i++)
+                        {
+                            <td id="sectionRow-@r-sec3-@i" @if (Model.rows1to3[n] != 0) { @: class="prefilled"
+                                    }>
+                                <input @if (Model.rows1to3[n] != 0) { @: value="@Model.rows1to3[n]"
+                                } @if (Model.rows1to3[n] != 0) { @: readonly
+                                } class="col-md-offset-5" name="sec3" type="number" min="1" max="9" />
+                            </td>
+                            n++;
+                        }
+
+                    </tr>
+                }
+            }
+            <!--Rows 4 to 6, works same as comments above-->
+            @for (int n = 0; n < Model.rows4to6.Count(); n++)
+            {
+
+
+                for (int r = 4; r < 7; r++)
+                {
+                    <tr class="sectionRow-@r">
+
+                        @for (int i = 0; i < 3; i++)
+                        {
+                            if (i == 2)
+                            {
+                                <td id="sectionRow-@r-sec4-@i" @if (Model.rows4to6[n] != 0){ @: class="sectionEnd prefilled"
+                                    } else { @: class="sectionEnd" 
+                                    }>
+                                    <input @if (Model.rows4to6[n] != 0) { @: value="@Model.rows4to6[n]"
+                                    } @if (Model.rows4to6[n] != 0) { @: readonly
+                                    } class="col-md-offset-5" name="sec4" type="number" min="1" max="9" />
+                                </td>
+                                n++;
+                            }
+                            else
+                            {
+                                <td id="sectionRow-@r-sec4-@i" @if (Model.rows4to6[n] != 0) { @: class="prefilled"
+                                    }>
+                                    <input @if (Model.rows4to6[n] != 0) { @: value="@Model.rows4to6[n]"
+                                    } @if (Model.rows4to6[n] != 0) { @: readonly
+                                    } class="col-md-offset-5" name="sec4" type="number" min="1" max="9" />
+                                </td>
+                                n++;
+                            }
+                        }
+                        @for (int i = 0; i < 3; i++)
+                        {
+                            if (i == 2)
+                            {
+                                <td id="sectionRow-@r-sec5-@i" @if (Model.rows4to6[n] != 0){ @: class="sectionEnd prefilled"
+                                    } else { @: class="sectionEnd" 
+                                    }>
+                                    <input @if (Model.rows4to6[n] != 0) { @: value="@Model.rows4to6[n]"
+                                    } @if (Model.rows4to6[n] != 0) { @: readonly
+                                    } class="col-md-offset-5" name="sec5" type="number" min="1" max="9" />
+                                </td>
+                                n++;
+                            }
+                            else
+                            {
+                                <td id="sectionRow-@r-sec5-@i" @if (Model.rows4to6[n] != 0) { @: class="prefilled"
+                                    }>
+                                    <input @if (Model.rows4to6[n] != 0) { @: value="@Model.rows4to6[n]"
+                                    } @if (Model.rows4to6[n] != 0) { @: readonly
+                                    } class="col-md-offset-5" name="sec5" type="number" min="1" max="9" />
+                                </td>
+                                n++;
+                            }
+
+
+                        }
+                        @for (int i = 0; i < 3; i++)
+                        {
+                            <td id="sectionRow-@r-sec6-@i" @if (Model.rows4to6[n] != 0) { @: class="prefilled"
+                                    }>
+                                <input @if (Model.rows4to6[n] != 0) { @: value="@Model.rows4to6[n]"
+                                } @if (Model.rows4to6[n] != 0) { @: readonly
+                                } class="col-md-offset-5" name="sec6" type="number" min="1" max="9" />
+                            </td>
+                            n++;
+                        }
+                    </tr>
+                }
+
             }
 
-            @for (int r = 4; r < 7; r++)
+            <!--Rows 7 to 9, works same as comments above-->
+            @for (int n = 0; n < Model.rows7to9.Count(); n++)
             {
-                <tr class="sectionRow-@r">
-
-                    @for (int i = 0; i < 3; i++)
-                    {
-                        if (i == 2)
-                        {
-                            <td id="sectionRow-@r-sec4-@i" class="sectionEnd"><input class="col-md-offset-5" name="sec4" type="number" min="1" max="9" /></td>
-                        }
-                        else
-                        {
-                            <td id="sectionRow-@r-sec4-@i"><input class="col-md-offset-5" name="sec4" type="number" min="1" max="9" /></td>
-                        }
-                    }
-                    @for (int i = 0; i < 3; i++)
-                    {
-                        if (i == 2)
-                        {
-                            <td id="sectionRow-@r-sec5-@i" class="sectionEnd"><input class="col-md-offset-5" name="sec5" type="number" min="1" max="9" /></td>
-                        }
-                        else
-                        {
-                            <td id="sectionRow-@r-sec5-@i"><input class="col-md-offset-5" name="sec5" type="number" min="1" max="9" /></td>
-                        }
 
 
-                    }
-                    @for (int i = 0; i < 3; i++)
-                    {
-                        <td id="sectionRow-@r-sec6-@i"><input class="col-md-offset-5" name="sec6" type="number" min="1" max="9" /></td>
-                    }
-                </tr>
-            }
+                for (int r = 7; r < 10; r++)
+                {
+                    <tr class="sectionRow-@r">
+                        @for (int i = 0; i < 3; i++)
+                        {
+                            if (i == 2)
+                            {
+                                <td id="sectionRow-@r-sec7-@i" @if (Model.rows7to9[n] != 0){ @: class="sectionEnd prefilled"
+                                    } else { @: class="sectionEnd" 
+                                    }>
+                                    <input @if (Model.rows7to9[n] != 0) { @: value="@Model.rows7to9[n]"
+                                     } @if (Model.rows7to9[n] != 0) { @: readonly
+                                     } class="col-md-offset-5" name="sec7" type="number" min="1" max="9" />
+                                </td>
+                                n++;
+                            }
+                            else
+                            {
+                                <td id="sectionRow-@r-sec7-@i" @if (Model.rows7to9[n] != 0) { @: class="prefilled"
+                                    }>
+                                    <input @if (Model.rows7to9[n] != 0) { @: value="@Model.rows7to9[n]"
+                                    } @if (Model.rows7to9[n] != 0) { @: readonly
+                                    } class="col-md-offset-5" name="sec7" type="number" min="1" max="9" />
+                                </td>
+                                n++;
+                            }
+                        }
+                        @for (int i = 0; i < 3; i++)
+                        {
+                            if (i == 2)
+                            {
+                                <td id="sectionRow-@r-sec8-@i" @if (Model.rows7to9[n] != 0){ @: class="sectionEnd prefilled"
+                                    } else { @: class="sectionEnd" 
+                                    }>
+                                    <input @if (Model.rows7to9[n] != 0) { @: value="@Model.rows7to9[n]"
+                                     } @if (Model.rows7to9[n] != 0) { @: readonly
+                                     } class="col-md-offset-5" name="sec8" type="number" min="1" max="9" />
+                                </td>
+                                n++;
+                            }
+                            else
+                            {
+                                <td id="sectionRow-@r-sec8-@i" @if (Model.rows7to9[n] != 0) { @: class="prefilled"
+                                    }>
+                                    <input @if (Model.rows7to9[n] != 0) { @: value="@Model.rows7to9[n]"
+                                    } @if (Model.rows7to9[n] != 0) { @: readonly
+                                    } class="col-md-offset-5" name="sec8" type="number" min="1" max="9" />
+                                </td>
+                                n++;
+                            }
 
-            @for (int r = 7; r < 10; r++)
-            {
-                <tr class="sectionRow-@r">
-                    @for (int i = 0; i < 3; i++)
-                    {
-                        if (i == 2)
-                        {
-                            <td id="sectionRow-@r-sec7-@i" class="sectionEnd"><input class="col-md-offset-5" name="sec7" type="number" min="1" max="9" /></td>
-                        }
-                        else
-                        {
-                            <td id="sectionRow-@r-sec7-@i"><input class="col-md-offset-5" name="sec7" type="number" min="1" max="9" /></td>
-                        }
-                    }
-                    @for (int i = 0; i < 3; i++)
-                    {
-                        if (i == 2)
-                        {
-                            <td id="sectionRow-@r-sec8-@i" class="sectionEnd"><input class="col-md-offset-5" name="sec8" type="number" min="1" max="9" /></td>
-                        }
-                        else
-                        {
-                            <td id="sectionRow-@r-sec8-@i"><input class="col-md-offset-5" name="sec8" type="number" min="1" max="9" /></td>
-                        }
 
-
-                    }
-                    @for (int i = 0; i < 3; i++)
-                    {
-                        <td id="sectionRow-@r-sec9-@i"><input class="col-md-offset-5" name="sec9" type="number" min="1" max="9" /></td>
-                    }
-                </tr>
+                        }
+                        @for (int i = 0; i < 3; i++)
+                        {
+                            <td id="sectionRow-@r-sec9-@i" @if (Model.rows7to9[n] != 0) { @: class="prefilled"
+                                    }>
+                                <input @if (Model.rows7to9[n] != 0) { @: value="@Model.rows7to9[n]"
+                                } @if (Model.rows7to9[n] != 0) { @: readonly
+                                } class="col-md-offset-5" name="sec9" type="number" min="1" max="9" />
+                            </td>
+                            n++;
+                        }
+                    </tr>
+                }
             }
         </table>
 
+
         <br />
-
+       
         <input class="col-md-offset-7 col-md-2 col-sm-12" type="submit" value="submit" />
+        
     }
-
+    
 </div>
 
 @section scripts{
@@ -177,6 +304,8 @@
                 e.preventDefault();
             });
         });
+
+       
     </script>
 
     <script>

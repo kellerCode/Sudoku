@@ -1,0 +1,141 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+#buttonSection{
+    display:flex;
+}
+.prefilled, .prefilled input{
+    background-color: lightgrey;
+    font-weight:bold;
+}
+#buttonSection button{
+    margin-right:5px;
+}
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+input{
+    border:none;
+    outline:none;
+}
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+th, td{
+    border: 1px solid black;
+    height:50px;
+}
+th{
+    display:none;
+}
+table, th, td{
+    min-width:60px;
+}
+input{
+    width:30px;
+    height:35px;
+    border:none;
+}
+td.sectionEnd, th.sectionEnd {
+    border-right:3px solid black;
+}
+table{
+    border:3px solid black;
+}
+tr.sectionRow-3, tr.sectionRow-6{
+    border-bottom:3px solid black;
+}
+
+/*GETTING ONE WHOLE SQUARE A CERTAIN COLOR*/
+#sectionRow-2-sec1-1, #sectionRow-2-sec1-1 input{
+    /*background-color: red;*/
+}
+.active {
+    background-color:yellow;
+}
+
+input:invalid {
+    color: red;
+    font-weight:bold;
+}
+#instructions{
+    border:2px solid black;
+    height:455px;
+    margin-right:40px;
+    background-color:lightgray;
+}
+.message{
+    color:red;
+}
+@media screen and (max-width:500px){
+   table, th, td{
+    min-width: 10px;
+}
+   th, td{
+    border: 1px solid black;
+    height:20px;
+}
+   #instructions{
+       width:90%;
+       margin:5%;
+       height:auto;
+   }
+   input[type=number]{
+       margin-left:35%;
+       width:40%;
+   }
+   input{
+       width:100%;
+       margin-left:15%;
+   }
+      #Message{
+          position:fixed;
+          top:8%;
+          z-index:100;
+          width:100%;
+          margin-left:-4%
+          
+   }
+}
+@media Screen and (max-width: 380px) {
+    table{
+        width:95%;
+        margin:2%;
+    }
+  table, th, td{
+    min-width: 20px;
+}
+   th, td{
+    border: 1px solid black;
+    height:30px;
+}
+   input[type=number]{
+       margin-left:5%;
+       width:80%;
+   }
+   input{
+       width:100%;
+       margin-left:15%;
+   }
+
+   
+}
